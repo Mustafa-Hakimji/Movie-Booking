@@ -123,13 +123,14 @@ const PlaceScreen = () => {
         data={places}
         renderItem={({item, index}) => (
           <TouchableOpacity
+            key={index}
             onPress={() => {
               setSelectedCity(item.place);
               setTimeout(() => {
                 navigation.navigate('HomeScreen');
               }, 800);
             }}
-            style={{marginVertical: 10, marginHorizontal: 20}}>
+            style={{marginVertical: 10, marginHorizontal: 10}}>
             <ImageBackground
               imageStyle={{borderRadius: 8}}
               style={{width: 160, height: 100, opacity: 0.8}}

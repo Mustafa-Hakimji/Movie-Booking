@@ -11,7 +11,9 @@ const Header = () => {
   return (
     <View style={{marginBottom: 55}}>
       <ImageBackground
-        source={{uri: '/9JBEPLTPSm0d1mbEcLxULjJq9Eh.jpg'}}
+        source={{
+          uri: 'https://image.tmdb.org/t/p/original/9JBEPLTPSm0d1mbEcLxULjJq9Eh.jpg',
+        }}
         style={{height: 200, resizeMode: 'contain'}}>
         <TouchableOpacity
           style={{

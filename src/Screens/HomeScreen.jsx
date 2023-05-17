@@ -1,12 +1,21 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Modal,
+  Image,
+  Dimensions,
+  Alert,
+  ScrollView,
+} from 'react-native';
+import React, {useState} from 'react';
 import {usePlaceContext} from '../Providers/PlaceContext';
 import Moviecard from '../Components/Moviecard';
 import Header from '../Components/Header';
 
 const HomeScreen = () => {
-  const {selectedCity, setSelectedCity} = usePlaceContext();
-
   const data = [
     {
       adult: false,
@@ -135,7 +144,7 @@ const HomeScreen = () => {
       original_title: 'কীর্তন',
       overview: 'Under wraps.',
       popularity: 24.603,
-      poster_path: null,
+      poster_path: '/cnsJnyCUefcHDQT1OnFgUOSR2nR.jpg',
       release_date: '2023-05-05',
       title: 'Kirtan',
       video: false,
@@ -169,7 +178,7 @@ const HomeScreen = () => {
       overview:
         "Anuragam is a film set in Kochi, India that explores the complexities of modern-day relationships through the lives of three couples. The story follows Mercy, a single mother and banker who is loved by her manager, Jose, but still grieving the loss of her husband. Meanwhile, popular music composer Shankar is preparing to enter a new relationship after his separation from his wife, Devika, a successful baker. Their daughter, Janani, and Mercy's son, Aswin, are classmates and friends, with their friendship potentially blossoming into romance. Music plays an important role in the film, which ultimately reminds viewers that love can happen at any age and make life worth living.",
       popularity: 24.599,
-      poster_path: null,
+      poster_path: '/cMwow5tasnOIj27ozjRk15mmozz.jpg',
       release_date: '2023-05-05',
       title: 'Anuragam',
       video: false,
@@ -341,21 +350,267 @@ const HomeScreen = () => {
       vote_count: 1,
     },
   ];
+  const languages = [
+    {
+      id: '0',
+      language: 'English',
+    },
+    {
+      id: '10',
+      language: 'Kannada',
+    },
+    {
+      id: '1',
+      language: 'Telugu',
+    },
+    {
+      id: '2',
+      language: 'Hindi',
+    },
+    {
+      id: '3',
+      language: 'Tamil',
+    },
+    {
+      id: '5',
+      language: 'Malayalam',
+    },
+    {
+      id: '6',
+      language: 'All',
+    },
+  ];
+  const genres = [
+    {
+      id: '0',
+      language: 'Horror',
+    },
+    {
+      id: '1',
+      language: 'Comedy',
+    },
+    {
+      id: '2',
+      language: 'Action',
+    },
+    {
+      id: '3',
+      language: 'Romance',
+    },
+    {
+      id: '5',
+      language: 'Thriller',
+    },
+    {
+      id: '6',
+      language: 'Drama',
+    },
+  ];
+  const {selectedCity, setSelectedCity} = usePlaceContext();
+  const [modalVisible, setModalVisible] = useState(false);
+  const {height} = Dimensions.get('window');
+  const [selectedFilter, setSelectedFilter] = useState('');
+  const [sortedData, setSortedData] = useState(data);
 
+  const applyFilter = item => {
+    setModalVisible(false);
+    if (selectedFilter) {
+      if (selectedFilter === 'All') {
+        setSortedData(data);
+      } else {
+        setSortedData(
+          data.filter(item => item.original_language === selectedFilter),
+        );
+      }
+    }
+  };
   return (
-    <View>
-      <Text>{selectedCity}</Text>
+    <View style={{flex: 1}}>
       <FlatList
         numColumns={2}
         columnWrapperStyle={{justifyContent: 'space-between'}}
-        data={data}
+        data={sortedData}
         ListHeaderComponent={() => <Header />}
         renderItem={({item, index}) => <Moviecard item={item} key={index} />}
       />
+      <TouchableOpacity
+        style={{
+          backgroundColor: 'gold',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: 50,
+          width: 50,
+          borderRadius: 25,
+          position: 'absolute',
+          bottom: 40,
+          right: 10,
+        }}
+        onPress={() => setModalVisible(!modalVisible)}>
+        <Image
+          source={require('../../assets/Images/filter.png')}
+          style={{
+            height: 25,
+            width: 27,
+          }}
+        />
+      </TouchableOpacity>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: '900',
+                color: 'black',
+                textAlign: 'center',
+                marginTop: 10,
+              }}>
+              Filter
+            </Text>
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: '900',
+                color: 'black',
+                marginVertical: 10,
+                marginHorizontal: 10,
+              }}>
+              Select language
+            </Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              style={{flexWrap: 'wrap'}}>
+              {languages?.map((item, i) => {
+                return selectedFilter === item.language ? (
+                  <TouchableOpacity
+                    key={i}
+                    onPress={() => setSelectedFilter()}
+                    style={{
+                      paddingHorizontal: 10,
+                      borderWidth: 0,
+                      borderRadius: 7,
+                      marginHorizontal: 10,
+                      backgroundColor: 'orange',
+                    }}>
+                    <Text
+                      style={{fontWeight: '500', fontSize: 15, color: 'white'}}>
+                      {item.language}
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    key={i}
+                    onPress={() => setSelectedFilter(item.language)}
+                    style={{
+                      paddingHorizontal: 10,
+                      borderWidth: 1,
+                      borderRadius: 7,
+                      marginHorizontal: 10,
+                    }}>
+                    <Text
+                      style={{fontWeight: '700', fontSize: 15, color: 'black'}}>
+                      {item.language}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: '900',
+                color: 'black',
+                marginVertical: 10,
+                marginHorizontal: 10,
+                marginTop: -80,
+              }}>
+              Select genres
+            </Text>
+
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              style={{flexWrap: 'wrap'}}>
+              {genres?.map((item, i) => {
+                return (
+                  <TouchableOpacity
+                    key={i}
+                    style={{
+                      paddingHorizontal: 10,
+                      borderWidth: 1,
+                      borderRadius: 7,
+                      marginHorizontal: 10,
+                    }}>
+                    <Text
+                      style={{fontWeight: '700', fontSize: 15, color: 'black'}}>
+                      {item.language}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+
+            <TouchableOpacity
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {
+                applyFilter(selectedFilter);
+              }}>
+              <Text style={styles.textStyle}>Apply</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
 
 export default HomeScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    top: Dimensions.get('window').height / 2,
+    width: '100%',
+  },
+  modalView: {
+    flex: 1,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    // alignItems: 'center',
+    shadowColor: '#000',
+    height: 320,
+    width: '100%',
+  },
+  button: {
+    borderRadius: 20,
+    padding: 15,
+    elevation: 2,
+    width: '100%',
+    position: 'absolute',
+    bottom: 0,
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+});

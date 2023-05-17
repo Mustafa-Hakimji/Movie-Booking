@@ -5,6 +5,8 @@ import HomeScreen from '../Screens/HomeScreen';
 import ProfileScreen from '../Components/ProfileScreen';
 import {Image, TouchableOpacity, View, Text} from 'react-native';
 import PlaceScreen from '../Screens/PlaceScreen';
+import MovieScreen from '../Screens/MovieScreen';
+import TheatreScreen from '../Screens/TheatreScreen';
 
 const HomeStack = createNativeStackNavigator();
 const ProfileStack = createNativeStackNavigator();
@@ -49,6 +51,12 @@ function HomeStackScreens() {
         }}
       />
       <HomeStack.Screen name="Places" component={PlaceScreen} />
+      <HomeStack.Screen
+        name="Movie"
+        component={MovieScreen}
+        options={{headerShown: true}}
+      />
+      <HomeStack.Screen name="Theatre" component={TheatreScreen} />
     </HomeStack.Navigator>
   );
 }
