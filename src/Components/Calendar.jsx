@@ -17,7 +17,6 @@ const Calendar = ({selectedDate, onSelecteDate}) => {
   useEffect(() => {
     getDates();
   }, []);
-  console.log(dates);
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       {dates.map((date, i) => (

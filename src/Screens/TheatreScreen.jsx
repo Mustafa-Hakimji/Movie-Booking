@@ -178,7 +178,6 @@ const TheatreScreen = () => {
         s => s.seat === seat.seat,
       );
       updatedRows[rowIndex].seats[seatIndex].bookingStatus = 'disabled';
-      console.log(rowIndex, seatIndex);
     });
     setRows(updatedRows);
     setSelectedseats([]);

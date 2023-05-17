@@ -679,12 +679,6 @@ const MovieScreen = () => {
       ],
     },
   ];
-  const {selectedCity} = usePlaceContext();
-  const navigation = useNavigation();
-  const route = useRoute();
-  const todaysDate = moment().format('YYYY-MM-DD');
-  const [selectedDate, setSelectedDate] = useState(todaysDate);
-  const {title} = route?.params;
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: title,
@@ -708,6 +702,12 @@ const MovieScreen = () => {
       },
     });
   }, []);
+  const {selectedCity} = usePlaceContext();
+  const navigation = useNavigation();
+  const route = useRoute();
+  const todaysDate = moment().format('YYYY-MM-DD');
+  const [selectedDate, setSelectedDate] = useState(todaysDate);
+  const {title} = route?.params;
   const [mall, setMall] = useState([]);
   return (
     <View>
